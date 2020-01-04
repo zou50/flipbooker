@@ -3,12 +3,15 @@ window.onload = function() {
   console.log("Flipbooker");
 
   loadCanvas();
+  initializeFrames();
 }
 
-var canvas;
-var ctx;
+let canvas, ctx;
 let isDrawing = false;
 let lastX = 0, lastY = 0;
+
+let framesContainer;
+let frames = [];
 
 function loadCanvas() {
   canvas = document.getElementById('main-board');
@@ -61,4 +64,22 @@ function onMouseDown(e) {
 function onMouseUp() {
   console.log("mouse up");
   isDrawing = false;
+}
+
+// FRAMES
+function initializeFrames() {
+  framesContainer = document.getElementById('frames');
+  
+}
+
+function createFrameImage() {
+
+}
+
+function addFrame() {
+
+}
+
+function deleteFrame() {
+
 }

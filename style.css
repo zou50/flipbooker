@@ -12,3 +12,12 @@ html, body {
 #main-board {
   border: 0.5px solid #000;
 }
+
+#frames {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  margin: 10px 0px;
+}
