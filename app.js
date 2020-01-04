@@ -52,7 +52,6 @@ function onMouseOut() {
 }
 
 function onMouseMove(e) {
-  console.log("mouse move");
   draw(e);
 }
 
@@ -91,8 +90,6 @@ function drawDown(e) {
   let my = e.offsetY;
 
   ctx.beginPath();
-  console.log(ctx.lineWidth);
-  console.log(ctx.strokeStyle);
   ctx.moveTo(mx, my);
   tempStack = [];
   tempStack.push({
@@ -122,14 +119,12 @@ function drawUp(e) {
 }
 
 function undo() {
-  console.log("before: ", undoStack);
   undoStack.pop();
   redraw();
-  console.log("after:", undoStack);
 }
 
 function redo() {
-
+  
 }
 
 function redraw() {
@@ -142,8 +137,6 @@ function redraw() {
 
       if (pt.mode == "begin") {
         ctx.beginPath();
-        console.log(ctx.lineWidth);
-        console.log(ctx.strokeStyle);
         ctx.moveTo(pt.x, pt.y);
       }
       if (pt.mode == "draw") {
