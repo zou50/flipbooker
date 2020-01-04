@@ -80,6 +80,7 @@ function createFrameImage() {
   img.src = "";
   img.alt = "";
   img.className = "current-frame"
+  img.addEventListener('mousedown', selectFrame);
 
   framesContainer.appendChild(img);
   framesContainer.parentElement.scrollLeft = framesContainer.parentElement.scrollWidth;
@@ -98,4 +99,13 @@ function addFrame() {
 
 function deleteFrame() {
 
+}
+
+function selectFrame(e) {
+  currentFrame.className = "";
+  currentFrame = e.target;
+  currentFrame.className = "current-frame";
+
+  clearBoard();
+  ctx.drawImage(currentFrame, 0, 0);
 }
