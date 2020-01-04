@@ -9,15 +9,30 @@ html, body {
   align-items: center;
 }
 
+.scroll {
+  border: 1px solid #000;
+  margin: 10px 0px;
+
+  width: 600px;
+  overflow-x: scroll;
+}
+
 #main-board {
-  border: 0.5px solid #000;
+  border: 1px solid #000;
 }
 
 #frames {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  box-sizing: border-box;
+}
 
-  margin: 10px 0px;
+#frames img {
+  display: inline-block;
+  box-sizing: border-box;
+
+  border: 1px solid #000;
+  margin: 5px;
 }

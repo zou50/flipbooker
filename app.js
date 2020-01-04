@@ -69,15 +69,23 @@ function onMouseUp() {
 // FRAMES
 function initializeFrames() {
   framesContainer = document.getElementById('frames');
-  
+  addFrame();
 }
 
-function createFrameImage() {
-
+function createFrameImage(data) {
+  let img = document.createElement('img');
+  img.src = data;
+  img.width = 100;
+  img.height = 100;
+  framesContainer.appendChild(img);
+  framesContainer.parentElement.scrollLeft = framesContainer.parentElement.scrollWidth;
 }
 
 function addFrame() {
-
+    let data = canvas.toDataURL("image/png");
+    frames.push(data);
+    createFrameImage(data);
+    clearBoard();
 }
 
 function deleteFrame() {
