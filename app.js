@@ -275,3 +275,11 @@ function setButtonsDisabled(status) {
   addFrameButton.disabled = status;
   deleteFrameButton.disabled = status;
 }
+
+// DEBUGGING
+document.addEventListener('keydown', (e) => {
+  if (e.key == 'a') {
+    console.log("UNDO: ", undoStack);
+    console.log("REDO: ", redoStack);
+  }
+});
