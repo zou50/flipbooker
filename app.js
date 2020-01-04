@@ -65,36 +65,40 @@ function onMouseDown(e) {
 function onMouseUp() {
   console.log("mouse up");
   isDrawing = false;
+  saveFrame();
 }
 
 // FRAMES
 function initializeFrames() {
   framesContainer = document.getElementById('frames');
-  currentFrame = createFrameImage();
+  addFrame();
 }
 
-function createFrameImage() {
+function addFrame() {
+  clearBoard();
+  if (currentFrame != null) {
+    currentFrame.className = "";
+  }
+
   let img = document.createElement('img');
   img.width = 100;
   img.height = 100;
   img.src = "";
   img.alt = "";
-  img.className = "current-frame"
+  img.className = "current-frame";
   img.addEventListener('mousedown', selectFrame);
+  img.id = frames.length;
 
   framesContainer.appendChild(img);
   framesContainer.parentElement.scrollLeft = framesContainer.parentElement.scrollWidth;
+  frames.push(img);
 
-  return img;
+  currentFrame = img;
 }
 
-function addFrame() {
-    let data = canvas.toDataURL("image/png");
-    frames.push(data);
-    currentFrame.src = data;
-    currentFrame.className = "";
-    currentFrame = createFrameImage();
-    clearBoard();
+function saveFrame() {
+  let data = canvas.toDataURL("image/png");
+  currentFrame.src = data;
 }
 
 function deleteFrame() {
