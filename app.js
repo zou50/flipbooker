@@ -113,24 +113,31 @@ function drawUp(e) {
     mode: "end",
   });
   undoStack.push(tempStack);
+  redoStack = [];
 
   isDrawing = false;
   saveFrame();
 }
 
 function undo() {
-  undoStack.pop();
+  let item = undoStack.pop();
+  if (item)
+    redoStack.push(item);
   redraw();
 }
 
 function redo() {
-  
+  let item = redoStack.pop();
+  if (item)
+    undoStack.push(item);
+  redraw();
 }
 
 function redraw() {
   clearBoard(false);
   for (let i = 0; i < undoStack.length; i++) {
     let innerStack = undoStack[i];
+    let didClear = false;
     for (let j = 0; j < innerStack.length; j++) {
       let pt = innerStack[j];
       let begin = false;
@@ -148,9 +155,11 @@ function redraw() {
       }
       if (pt.mode == "clear") {
         clearBoard(false);
+        didClear = true;
       }
     }
-    ctx.stroke();
+    if (!didClear)
+      ctx.stroke();
   }
   saveFrame();
 }
