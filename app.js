@@ -3,16 +3,23 @@ window.onload = function() {
   console.log("Flipbooker");
 
   loadCanvas();
+  loadButtons();
   initializeFrames();
 }
 
 let canvas, ctx;
+let clearBoardButton, addFrameButton, deleteFrameButton;
 let isDrawing = false;
 let lastX = 0, lastY = 0;
 
 let framesContainer;
 let frames = [];
 let currentFrame;
+
+let isAnimationPlaying = false;
+let animationTimer;
+let animationDelay = 100;
+let currentAnimationFrame = 0;
 
 function loadCanvas() {
   canvas = document.getElementById('main-board');
@@ -24,6 +31,12 @@ function loadCanvas() {
   canvas.addEventListener('mousemove', onMouseMove);
   canvas.addEventListener('mousedown', onMouseDown);
   canvas.addEventListener('mouseup', onMouseUp);
+}
+
+function loadButtons() {
+  clearBoardButton = document.getElementById('clear-board-button');
+  addFrameButton = document.getElementById('add-frame-button');
+  deleteFrameButton = document.getElementById('delete-frame-button');
 }
 
 function draw(e) {
@@ -132,6 +145,40 @@ function selectFrameFromMouse(e) {
 }
 
 function selectFrameFromElement(e) {
+  currentFrame.className = "";
   currentFrame = e;
   selectFrame(e);
+}
+
+// ANIMATIONS
+function handleAnimation(e) {
+  isAnimationPlaying = !isAnimationPlaying;
+
+  if (animationTimer != null)
+    clearInterval(animationTimer);
+
+  currentAnimationFrame = 0;
+  if (isAnimationPlaying) {
+    e.innerHTML = "Stop";
+    setButtonsDisabled(true);
+    animationHelper();
+    animationTimer = setInterval(animationHelper, animationDelay);
+  } else {
+    e.innerHTML = "Play";
+    setButtonsDisabled(false);
+  }
+}
+
+function animationHelper() {
+  let nextFrame = frames[currentAnimationFrame];
+  selectFrameFromElement(nextFrame);
+
+  if (++currentAnimationFrame >= frames.length)
+    currentAnimationFrame = 0;
+}
+
+function setButtonsDisabled(status) {
+  clearBoardButton.disabled = status;
+  addFrameButton.disabled = status;
+  deleteFrameButton.disabled = status;
 }
