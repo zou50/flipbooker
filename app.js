@@ -112,6 +112,9 @@ function drawUp(e) {
 }
 
 function undo() {
+  if (undoStack.length == 0)
+    return;
+
   let item = undoStack.pop();
   if (item)
     redoStack.push(item);
@@ -119,6 +122,9 @@ function undo() {
 }
 
 function redo() {
+  if (redoStack.length == 0)
+    return;
+
   let item = redoStack.pop();
   if (item)
     undoStack.push(item);
@@ -194,6 +200,9 @@ function addFrame() {
 
   currentFrame = img;
   clearBoard(false);
+
+  undoStack = [];
+  redoStack = [];
 }
 
 function saveFrame() {
@@ -216,23 +225,28 @@ function deleteFrame() {
   selectFrameFromElement(frames[newIdx]);
 }
 
-function selectFrame(e) {
+function selectFrame(e, clearUndoFlag) {
   currentFrame.className = "current-frame";
 
   clearBoard(false);
   ctx.drawImage(currentFrame, 0, 0);
+
+  if (clearUndoFlag) {
+    undoStack = [];
+    redoStack = [];
+  }
 }
 
 function selectFrameFromMouse(e) {
   currentFrame.className = "";
   currentFrame = e.target;
-  selectFrame(e);
+  selectFrame(e, true);
 }
 
 function selectFrameFromElement(e) {
   currentFrame.className = "";
   currentFrame = e;
-  selectFrame(e);
+  selectFrame(e, false);
 }
 
 // ANIMATIONS
