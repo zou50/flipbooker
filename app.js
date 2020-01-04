@@ -38,8 +38,11 @@ function draw(e) {
   lastY = e.offsetY;
 }
 
-function clearBoard() {
+function clearBoard(shouldSaveFlag) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (shouldSaveFlag)
+    saveFrame();
 }
 
 function onMouseEnter() {
@@ -75,7 +78,6 @@ function initializeFrames() {
 }
 
 function addFrame() {
-  clearBoard();
   if (currentFrame != null) {
     currentFrame.className = "";
   }
@@ -93,6 +95,7 @@ function addFrame() {
   frames.push(img);
 
   currentFrame = img;
+  clearBoard(false);
 }
 
 function saveFrame() {
@@ -118,7 +121,7 @@ function deleteFrame() {
 function selectFrame(e) {
   currentFrame.className = "current-frame";
 
-  clearBoard();
+  clearBoard(false);
   ctx.drawImage(currentFrame, 0, 0);
 }
 
