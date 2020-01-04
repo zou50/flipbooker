@@ -34,6 +34,10 @@ function draw(e) {
   lastY = e.offsetY;
 }
 
+function clearBoard() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 function onMouseEnter() {
   console.log("mouse enter");
 }
