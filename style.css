@@ -27,6 +27,8 @@ html, body {
   justify-content: flex-start;
   align-items: center;
   box-sizing: border-box;
+
+  padding: 10px 5px;
 }
 
 #frames img {
@@ -34,5 +36,9 @@ html, body {
   box-sizing: border-box;
 
   border: 1px solid #000;
-  margin: 5px;
+  margin: 0px 5px;
+}
+
+#frames .current-frame {
+  border: 1px solid #00f;
 }

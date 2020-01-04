@@ -12,6 +12,7 @@ let lastX = 0, lastY = 0;
 
 let framesContainer;
 let frames = [];
+let currentFrame;
 
 function loadCanvas() {
   canvas = document.getElementById('main-board');
@@ -69,22 +70,29 @@ function onMouseUp() {
 // FRAMES
 function initializeFrames() {
   framesContainer = document.getElementById('frames');
-  addFrame();
+  currentFrame = createFrameImage();
 }
 
-function createFrameImage(data) {
+function createFrameImage() {
   let img = document.createElement('img');
-  img.src = data;
   img.width = 100;
   img.height = 100;
+  img.src = "";
+  img.alt = "";
+  img.className = "current-frame"
+
   framesContainer.appendChild(img);
   framesContainer.parentElement.scrollLeft = framesContainer.parentElement.scrollWidth;
+
+  return img;
 }
 
 function addFrame() {
     let data = canvas.toDataURL("image/png");
     frames.push(data);
-    createFrameImage(data);
+    currentFrame.src = data;
+    currentFrame.className = "";
+    currentFrame = createFrameImage();
     clearBoard();
 }
 
