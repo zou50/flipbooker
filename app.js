@@ -86,8 +86,7 @@ function addFrame() {
   img.src = "";
   img.alt = "";
   img.className = "current-frame";
-  img.addEventListener('mousedown', selectFrame);
-  img.id = frames.length;
+  img.addEventListener('mousedown', selectFrameFromMouse);
 
   framesContainer.appendChild(img);
   framesContainer.parentElement.scrollLeft = framesContainer.parentElement.scrollWidth;
@@ -102,14 +101,34 @@ function saveFrame() {
 }
 
 function deleteFrame() {
+  if (frames.length == 1)
+    return;
 
+  let idx = frames.findIndex(f => f == currentFrame);
+  let newIdx = idx;
+  // Handle last element
+  if (idx == frames.length - 1)
+    newIdx = idx - 1;
+
+  frames.splice(idx, 1);
+  framesContainer.removeChild(currentFrame);
+  selectFrameFromElement(frames[newIdx]);
 }
 
 function selectFrame(e) {
-  currentFrame.className = "";
-  currentFrame = e.target;
   currentFrame.className = "current-frame";
 
   clearBoard();
   ctx.drawImage(currentFrame, 0, 0);
+}
+
+function selectFrameFromMouse(e) {
+  currentFrame.className = "";
+  currentFrame = e.target;
+  selectFrame(e);
+}
+
+function selectFrameFromElement(e) {
+  currentFrame = e;
+  selectFrame(e);
 }
