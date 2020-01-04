@@ -9,8 +9,12 @@ window.onload = function() {
 
 let canvas, ctx;
 let clearBoardButton, addFrameButton, deleteFrameButton;
+
 let isDrawing = false;
 let lastX = 0, lastY = 0;
+let tempStack = [];
+let undoStack = [];
+let redoStack = [];
 
 let framesContainer;
 let frames = [];
@@ -39,25 +43,6 @@ function loadButtons() {
   deleteFrameButton = document.getElementById('delete-frame-button');
 }
 
-function draw(e) {
-  if (!isDrawing)
-    return;
-
-  ctx.beginPath();
-  ctx.moveTo(lastX, lastY);
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.stroke();
-  lastX = e.offsetX;
-  lastY = e.offsetY;
-}
-
-function clearBoard(shouldSaveFlag) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  if (shouldSaveFlag)
-    saveFrame();
-}
-
 function onMouseEnter() {
   console.log("mouse enter");
 }
@@ -73,15 +58,121 @@ function onMouseMove(e) {
 
 function onMouseDown(e) {
   console.log("mouse down");
-  isDrawing = true;
-  lastX = e.offsetX;
-  lastY = e.offsetY;
+  drawDown(e);
 }
 
-function onMouseUp() {
+function onMouseUp(e) {
   console.log("mouse up");
+  drawUp(e);
+}
+
+// DRAWING
+function draw(e) {
+  if (!isDrawing)
+    return;
+
+  let mx = e.offsetX;
+  let my = e.offsetY;
+
+  ctx.lineTo(mx, my);
+  ctx.stroke();
+  lastX = mx;
+  lastY = my;
+
+  tempStack.push({
+    x: mx,
+    y: my,
+    mode: "draw",
+  });
+}
+
+function drawDown(e) {
+  let mx = e.offsetX;
+  let my = e.offsetY;
+
+  ctx.beginPath();
+  console.log(ctx.lineWidth);
+  console.log(ctx.strokeStyle);
+  ctx.moveTo(mx, my);
+  tempStack = [];
+  tempStack.push({
+    x: mx,
+    y: my,
+    mode: "begin",
+  });
+
+  lastX = mx;
+  lastY = my;
+  isDrawing = true;
+}
+
+function drawUp(e) {
+  let mx = e.offsetX;
+  let my = e.offsetY;
+
+  tempStack.push({
+    x: mx,
+    y: my,
+    mode: "end",
+  });
+  undoStack.push(tempStack);
+
   isDrawing = false;
   saveFrame();
+}
+
+function undo() {
+  console.log("before: ", undoStack);
+  undoStack.pop();
+  redraw();
+  console.log("after:", undoStack);
+}
+
+function redo() {
+
+}
+
+function redraw() {
+  clearBoard(false);
+  for (let i = 0; i < undoStack.length; i++) {
+    let innerStack = undoStack[i];
+    for (let j = 0; j < innerStack.length; j++) {
+      let pt = innerStack[j];
+      let begin = false;
+
+      if (pt.mode == "begin") {
+        ctx.beginPath();
+        console.log(ctx.lineWidth);
+        console.log(ctx.strokeStyle);
+        ctx.moveTo(pt.x, pt.y);
+      }
+      if (pt.mode == "draw") {
+        ctx.lineTo(pt.x, pt.y);
+      }
+      if (pt.mode == "end" || j == innerStack.length - 1) {
+        ctx.lineTo(pt.x, pt.y);
+        ctx.stroke();
+      }
+      if (pt.mode == "clear") {
+        clearBoard(false);
+      }
+    }
+    ctx.stroke();
+  }
+  saveFrame();
+}
+
+function clearBoard(shouldSaveFlag) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (shouldSaveFlag) {
+    tempStack = [];
+    tempStack.push({
+      mode: "clear",
+    });
+    undoStack.push(tempStack);
+    saveFrame();
+  }
 }
 
 // FRAMES
