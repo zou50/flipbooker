@@ -3,12 +3,10 @@ window.onload = function() {
   console.log("Flipbooker");
 
   loadCanvas();
-  loadButtons();
   initializeFrames();
 }
 
 let canvas, ctx;
-let clearBoardButton, addFrameButton, deleteFrameButton;
 
 let isDrawing = false;
 let lastX = 0, lastY = 0;
@@ -35,12 +33,6 @@ function loadCanvas() {
   canvas.addEventListener('mousemove', onMouseMove);
   canvas.addEventListener('mousedown', onMouseDown);
   canvas.addEventListener('mouseup', onMouseUp);
-}
-
-function loadButtons() {
-  clearBoardButton = document.getElementById('clear-board-button');
-  addFrameButton = document.getElementById('add-frame-button');
-  deleteFrameButton = document.getElementById('delete-frame-button');
 }
 
 function onMouseEnter() {
@@ -271,9 +263,11 @@ function animationHelper() {
 }
 
 function setButtonsDisabled(status) {
-  clearBoardButton.disabled = status;
-  addFrameButton.disabled = status;
-  deleteFrameButton.disabled = status;
+  document.getElementById('clear-board-button').disabled = status;
+  document.getElementById('undo-draw-button').disabled = status;
+  document.getElementById('redo-draw-button').disabled = status;
+  document.getElementById('add-frame-button').disabled = status;
+  document.getElementById('delete-frame-button').disabled = status;
 }
 
 // DEBUGGING
