@@ -225,7 +225,7 @@ function deleteFrame() {
 
   frames.splice(idx, 1);
   framesContainer.removeChild(currentFrame);
-  selectFrameFromElement(frames[newIdx]);
+  selectFrameFromElement(frames[newIdx], true);
 }
 
 function selectFrame(e, clearUndoFlag) {
@@ -246,10 +246,10 @@ function selectFrameFromMouse(e) {
   selectFrame(e, true);
 }
 
-function selectFrameFromElement(e) {
+function selectFrameFromElement(e, clearUndoFlag) {
   currentFrame.className = "";
   currentFrame = e;
-  selectFrame(e, false);
+  selectFrame(e, clearUndoFlag);
 }
 
 // ANIMATIONS
@@ -273,7 +273,7 @@ function handleAnimation(e) {
 
 function animationHelper() {
   let nextFrame = frames[currentAnimationFrame];
-  selectFrameFromElement(nextFrame);
+  selectFrameFromElement(nextFrame, false);
 
   if (++currentAnimationFrame >= frames.length)
     currentAnimationFrame = 0;
