@@ -2,11 +2,27 @@ html, body {
   height: 100%;
 }
 
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.canvas-container {
+  position: relative;
+  width: 600px;
+  height: 600px;
+
+  border: 1px solid #000;
 }
 
 .scroll {
@@ -18,7 +34,12 @@ html, body {
 }
 
 #main-board {
-  border: 1px solid #000;
+  z-index: 0;
+}
+
+#alpha-board {
+  z-index: 1;
+  pointer-events: none;
 }
 
 #frames {

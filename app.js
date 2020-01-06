@@ -6,7 +6,7 @@ window.onload = function() {
   initializeFrames();
 }
 
-let canvas, ctx;
+let canvas, alphaCanvas, ctx;
 
 let isDrawing = false;
 let lastX = 0, lastY = 0;
@@ -25,10 +25,15 @@ let currentAnimationFrame = 0;
 
 function loadCanvas() {
   canvas = document.getElementById('main-board');
+  alphaCanvas = document.getElementById('alpha-board');
+
   ctx = canvas.getContext('2d');
   ctx.lineWidth = 5;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
+
+  ctxA = alphaCanvas.getContext('2d');
+  ctxA.globalAlpha = 0.1;
 
   // Add event listeners
   canvas.addEventListener('mouseenter', onMouseEnter);
@@ -169,6 +174,18 @@ function redraw() {
   saveFrame();
 }
 
+function drawAlpha() {
+  ctxA.clearRect(0, 0, alphaCanvas.width, alphaCanvas.height);
+
+  let idx = frames.findIndex(f => f == currentFrame);
+  if (idx == 0)
+    return;
+
+  // Draw ghost image of previous frame
+  let previousFrame = frames[idx - 1];
+  ctxA.drawImage(previousFrame, 0, 0);
+}
+
 function clearBoard(shouldSaveFlag) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -190,16 +207,12 @@ function initializeFrames() {
 }
 
 function addFrame() {
-  if (currentFrame != null) {
-    currentFrame.className = "";
-  }
-
+  // Create new image element for frame
   let img = document.createElement('img');
   img.width = 100;
   img.height = 100;
   img.src = "";
   img.alt = "";
-  img.className = "current-frame";
   img.addEventListener('mousedown', selectFrameFromMouse);
 
   undoStack = [];
@@ -207,12 +220,12 @@ function addFrame() {
   img.undoStack = undoStack;
   img.redoStack = redoStack;
 
+  // Store image as new frame
   framesContainer.appendChild(img);
   framesContainer.parentElement.scrollLeft = framesContainer.parentElement.scrollWidth;
   frames.push(img);
 
-  currentFrame = img;
-  clearBoard(false);
+  selectFrameFromElement(frames[frames.length - 1], true);
 }
 
 function saveFrame() {
@@ -241,7 +254,6 @@ function cloneFrame() {
   img.height = 100;
   img.src = canvas.toDataURL("image/png");
   img.alt = "";
-  img.className = "current-frame";
   img.addEventListener('mousedown', selectFrameFromMouse);
 
   img.undoStack = undoStack.map(e => e);
@@ -253,8 +265,7 @@ function cloneFrame() {
   framesContainer.parentElement.scrollLeft = framesContainer.parentElement.scrollWidth;
   frames.push(img);
 
-  currentFrame.className = "";
-  currentFrame = img;
+  selectFrameFromElement(frames[frames.length - 1], true);
 }
 
 function selectFrame(e, clearUndoFlag) {
@@ -263,6 +274,7 @@ function selectFrame(e, clearUndoFlag) {
   clearBoard(false);
   ctx.drawImage(currentFrame, 0, 0);
 
+  drawAlpha();
   if (clearUndoFlag) {
     undoStack = currentFrame.undoStack;
     redoStack = currentFrame.redoStack;
@@ -270,13 +282,17 @@ function selectFrame(e, clearUndoFlag) {
 }
 
 function selectFrameFromMouse(e) {
-  currentFrame.className = "";
+  if (currentFrame != null)
+    currentFrame.className = "";
+
   currentFrame = e.target;
   selectFrame(e, true);
 }
 
 function selectFrameFromElement(e, clearUndoFlag) {
-  currentFrame.className = "";
+  if (currentFrame != null)
+    currentFrame.className = "";
+
   currentFrame = e;
   selectFrame(e, clearUndoFlag);
 }

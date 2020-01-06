@@ -13,7 +13,10 @@
   <div class="container">
     <p>Flipbooker</p>
 
-    <canvas id="main-board" width="600" height="600"></canvas>
+    <div class="canvas-container">
+      <canvas id="main-board" width="600" height="600"></canvas>
+      <canvas id="alpha-board" width="600" height="600"></canvas>
+    </div>
 
     <button id="clear-board-button" onclick="clearBoard(true)">Clear</button>
     <button id="undo-draw-button" onclick="undo()">Undo</button>
