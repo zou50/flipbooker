@@ -203,22 +203,28 @@ function clearBoard(shouldSaveFlag) {
 // FRAMES
 function initializeFrames() {
   framesContainer = document.getElementById('frames');
-  addFrame();
+  addFrame("", false);
 }
 
-function addFrame() {
+function addFrame(src, isClone) {
   // Create new image element for frame
   let img = document.createElement('img');
   img.width = 100;
   img.height = 100;
-  img.src = "";
+  img.src = src;
   img.alt = "";
   img.addEventListener('mousedown', selectFrameFromMouse);
 
-  undoStack = [];
-  redoStack = [];
-  img.undoStack = undoStack;
-  img.redoStack = redoStack;
+  if (isClone) {
+    img.undoStack = undoStack.map(e => e);
+    img.redoStack = redoStack.map(e => e);
+  }
+  else {
+    img.undoStack = [];
+    img.redoStack = [];
+  }
+  undoStack = img.undoStack;
+  redoStack = img.redoStack;
 
   // Store image as new frame
   framesContainer.appendChild(img);
@@ -226,6 +232,11 @@ function addFrame() {
   frames.push(img);
 
   selectFrameFromElement(frames[frames.length - 1], true);
+}
+
+function cloneFrame() {
+  let oldSrc = canvas.toDataURL("image/png");
+  addFrame(oldSrc, true);
 }
 
 function saveFrame() {
@@ -246,26 +257,6 @@ function deleteFrame() {
   frames.splice(idx, 1);
   framesContainer.removeChild(currentFrame);
   selectFrameFromElement(frames[newIdx], true);
-}
-
-function cloneFrame() {
-  let img = document.createElement('img');
-  img.width = 100;
-  img.height = 100;
-  img.src = canvas.toDataURL("image/png");
-  img.alt = "";
-  img.addEventListener('mousedown', selectFrameFromMouse);
-
-  img.undoStack = undoStack.map(e => e);
-  img.redoStack = redoStack.map(e => e);
-  undoStack = img.undoStack;
-  redoStack = img.redoStack;
-
-  framesContainer.appendChild(img);
-  framesContainer.parentElement.scrollLeft = framesContainer.parentElement.scrollWidth;
-  frames.push(img);
-
-  selectFrameFromElement(frames[frames.length - 1], true);
 }
 
 function selectFrame(e, clearUndoFlag) {
