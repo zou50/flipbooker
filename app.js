@@ -4,6 +4,7 @@ window.onload = function() {
 
   loadCanvas();
   initializeFrames();
+  loadJSZip();
 }
 
 let canvas, alphaCanvas, animCanvas;
@@ -23,6 +24,8 @@ let isAnimationPlaying = false;
 let animationTimer;
 let animationDelay = 100;
 let currentAnimationFrame = 0;
+
+let zip;
 
 function loadCanvas() {
   canvas = document.getElementById('main-board');
@@ -351,6 +354,22 @@ function setButtonsDisabled(status) {
   document.getElementById('add-frame-button').disabled    = status;
   document.getElementById('delete-frame-button').disabled = status;
   document.getElementById('clone-frame-button').disabled  = status;
+}
+
+// EXPORT
+function loadJSZip() {
+  zip = new JSZip();
+}
+
+function exportFrames() {
+  console.log("EXPORT");
+  for (let i = 0; i < frames.length; i++) {
+    let fileName = "frame_" + i + ".png";
+    zip.file(fileName, frames[i].src.substr(frames[i].src.indexOf(',')+1), {base64: true});
+  }
+  zip.generateAsync({type:"base64"}).then(function (base64) {
+    window.location = "data:application/zip;base64," + base64;
+  });
 }
 
 // DEBUGGING

@@ -10,6 +10,7 @@
   <link rel="manifest" href="site.webmanifest">
   <link rel="stylesheet" href="style.css">
 
+  <script type="text/javascript" src="jszip.min.js"></script>
   <script type="text/javascript" src="app.js"></script>
 </head>
 
@@ -39,6 +40,12 @@
 
     <div class="scroll">
       <div id="frames"></div>
+    </div>
+
+    <div class="button-container">
+      <div class="button-container-row">
+        <button id="export-frames-button" onclick="exportFrames()">Export As PNG</button>
+      </div>
     </div>
   </div>
 </body>
