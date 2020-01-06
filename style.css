@@ -50,6 +50,11 @@ button:active {
   background: #AAA;
 }
 
+button:disabled {
+  color: #CCC;
+  cursor: default;
+}
+
 canvas {
   position: absolute;
   top: 0;
