@@ -228,6 +228,28 @@ function deleteFrame() {
   selectFrameFromElement(frames[newIdx], true);
 }
 
+function cloneFrame() {
+  let img = document.createElement('img');
+  img.width = 100;
+  img.height = 100;
+  img.src = canvas.toDataURL("image/png");
+  img.alt = "";
+  img.className = "current-frame";
+  img.addEventListener('mousedown', selectFrameFromMouse);
+
+  img.undoStack = undoStack.map(e => e);
+  img.redoStack = redoStack.map(e => e);
+  undoStack = img.undoStack;
+  redoStack = img.redoStack;
+
+  framesContainer.appendChild(img);
+  framesContainer.parentElement.scrollLeft = framesContainer.parentElement.scrollWidth;
+  frames.push(img);
+
+  currentFrame.className = "";
+  currentFrame = img;
+}
+
 function selectFrame(e, clearUndoFlag) {
   currentFrame.className = "current-frame";
 
@@ -280,11 +302,12 @@ function animationHelper() {
 }
 
 function setButtonsDisabled(status) {
-  document.getElementById('clear-board-button').disabled = status;
-  document.getElementById('undo-draw-button').disabled = status;
-  document.getElementById('redo-draw-button').disabled = status;
-  document.getElementById('add-frame-button').disabled = status;
+  document.getElementById('clear-board-button').disabled  = status;
+  document.getElementById('undo-draw-button').disabled    = status;
+  document.getElementById('redo-draw-button').disabled    = status;
+  document.getElementById('add-frame-button').disabled    = status;
   document.getElementById('delete-frame-button').disabled = status;
+  document.getElementById('clone-frame-button').disabled  = status;
 }
 
 // DEBUGGING
