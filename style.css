@@ -51,8 +51,8 @@ button:active {
 }
 
 button:disabled {
-  color: #CCC;
-  cursor: default;
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 canvas {
