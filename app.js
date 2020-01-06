@@ -6,7 +6,8 @@ window.onload = function() {
   initializeFrames();
 }
 
-let canvas, alphaCanvas, ctx;
+let canvas, alphaCanvas, animCanvas;
+let ctx, ctxAlpha, ctxAnim;
 
 let isDrawing = false;
 let lastX = 0, lastY = 0;
@@ -26,14 +27,17 @@ let currentAnimationFrame = 0;
 function loadCanvas() {
   canvas = document.getElementById('main-board');
   alphaCanvas = document.getElementById('alpha-board');
+  animCanvas = document.getElementById('anim-board');
 
   ctx = canvas.getContext('2d');
   ctx.lineWidth = 5;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
 
-  ctxA = alphaCanvas.getContext('2d');
-  ctxA.globalAlpha = 0.1;
+  ctxAlpha = alphaCanvas.getContext('2d');
+  ctxAlpha.globalAlpha = 0.1;
+
+  ctxAnim = animCanvas.getContext('2d');
 
   // Add event listeners
   canvas.addEventListener('mouseenter', onMouseEnter);
@@ -175,7 +179,7 @@ function redraw() {
 }
 
 function drawAlpha() {
-  ctxA.clearRect(0, 0, alphaCanvas.width, alphaCanvas.height);
+  clearAlphaBoard();
 
   let idx = frames.findIndex(f => f == currentFrame);
   if (idx == 0)
@@ -183,7 +187,7 @@ function drawAlpha() {
 
   // Draw ghost image of previous frame
   let previousFrame = frames[idx - 1];
-  ctxA.drawImage(previousFrame, 0, 0);
+  ctxAlpha.drawImage(previousFrame, 0, 0);
 }
 
 function clearBoard(shouldSaveFlag) {
@@ -198,6 +202,14 @@ function clearBoard(shouldSaveFlag) {
     redoStack = [];
     saveFrame();
   }
+}
+
+function clearAlphaBoard() {
+  ctxAlpha.clearRect(0, 0, alphaCanvas.width, alphaCanvas.height);
+}
+
+function clearAnimBoard() {
+  ctxAnim.clearRect(0, 0, animCanvas.width, animCanvas.height);
 }
 
 // FRAMES
@@ -297,11 +309,17 @@ function handleAnimation(e) {
 
   currentAnimationFrame = 0;
   if (isAnimationPlaying) {
+    clearBoard(false);
+    clearAlphaBoard();
+
     e.innerHTML = "Stop";
     setButtonsDisabled(true);
     animationHelper();
     animationTimer = setInterval(animationHelper, animationDelay);
   } else {
+    clearAnimBoard();
+    selectFrameFromElement(currentFrame, true);
+
     e.innerHTML = "Play";
     setButtonsDisabled(false);
   }
@@ -309,10 +327,21 @@ function handleAnimation(e) {
 
 function animationHelper() {
   let nextFrame = frames[currentAnimationFrame];
-  selectFrameFromElement(nextFrame, false);
+  animationShowFrame(nextFrame);
 
   if (++currentAnimationFrame >= frames.length)
     currentAnimationFrame = 0;
+}
+
+function animationShowFrame(nextFrame) {
+  if (currentFrame != null)
+    currentFrame.className = "";
+
+  currentFrame = nextFrame;
+  currentFrame.className = "current-frame";
+
+  clearAnimBoard();
+  ctxAnim.drawImage(currentFrame, 0, 0);
 }
 
 function setButtonsDisabled(status) {

@@ -42,6 +42,11 @@ canvas {
   pointer-events: none;
 }
 
+#anim-board {
+  z-index: 2;
+  pointer-events: none;
+}
+
 #frames {
   display: inline-flex;
   flex-direction: row;
