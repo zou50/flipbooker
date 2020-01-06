@@ -26,6 +26,9 @@ let currentAnimationFrame = 0;
 function loadCanvas() {
   canvas = document.getElementById('main-board');
   ctx = canvas.getContext('2d');
+  ctx.lineWidth = 5;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
 
   // Add event listeners
   canvas.addEventListener('mouseenter', onMouseEnter);
@@ -83,6 +86,9 @@ function drawDown(e) {
 
   ctx.beginPath();
   ctx.moveTo(mx, my);
+  ctx.lineTo(mx, my);
+  ctx.stroke();
+
   tempStack = [];
   tempStack.push({
     x: mx,
@@ -108,7 +114,7 @@ function drawUp(e) {
   redoStack = [];
 
   isDrawing = false;
-  saveFrame();
+  redraw();
 }
 
 function undo() {
@@ -143,6 +149,7 @@ function redraw() {
       if (pt.mode == "begin") {
         ctx.beginPath();
         ctx.moveTo(pt.x, pt.y);
+        ctx.lineTo(pt.x, pt.y);
       }
       if (pt.mode == "draw") {
         ctx.lineTo(pt.x, pt.y);
