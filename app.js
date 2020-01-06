@@ -171,6 +171,7 @@ function clearBoard(shouldSaveFlag) {
       mode: "clear",
     });
     undoStack.push(tempStack);
+    redoStack = [];
     saveFrame();
   }
 }
@@ -194,15 +195,17 @@ function addFrame() {
   img.className = "current-frame";
   img.addEventListener('mousedown', selectFrameFromMouse);
 
+  undoStack = [];
+  redoStack = [];
+  img.undoStack = undoStack;
+  img.redoStack = redoStack;
+
   framesContainer.appendChild(img);
   framesContainer.parentElement.scrollLeft = framesContainer.parentElement.scrollWidth;
   frames.push(img);
 
   currentFrame = img;
   clearBoard(false);
-
-  undoStack = [];
-  redoStack = [];
 }
 
 function saveFrame() {
@@ -232,8 +235,8 @@ function selectFrame(e, clearUndoFlag) {
   ctx.drawImage(currentFrame, 0, 0);
 
   if (clearUndoFlag) {
-    undoStack = [];
-    redoStack = [];
+    undoStack = currentFrame.undoStack;
+    redoStack = currentFrame.redoStack;
   }
 }
 
