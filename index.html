@@ -11,6 +11,11 @@
   <link rel="stylesheet" href="style.css">
 
   <script type="text/javascript" src="jszip.min.js"></script>
+
+  <script type="text/javascript" src="LZWEncoder.js"></script>
+  <script type="text/javascript" src="NeuQuant.js"></script>
+  <script type="text/javascript" src="GIFEncoder.js"></script>
+
   <script type="text/javascript" src="app.js"></script>
 </head>
 
@@ -19,9 +24,9 @@
     <h1>Flipbooker</h1>
 
     <div class="canvas-container">
-      <canvas id="main-board" width="600" height="600"></canvas>
-      <canvas id="alpha-board" width="600" height="600"></canvas>
-      <canvas id="anim-board" width="600" height="600"></canvas>
+      <canvas id="main-board" width="512" height="512"></canvas>
+      <canvas id="alpha-board" width="512" height="512"></canvas>
+      <canvas id="anim-board" width="512" height="512"></canvas>
     </div>
 
     <div class="button-container">
@@ -44,7 +49,8 @@
 
     <div class="button-container">
       <div class="button-container-row">
-        <button id="export-frames-button" onclick="exportFrames()">Export As PNG</button>
+        <button id="export-frames-png-button" onclick="exportFramesAsPng()">Export as PNG</button>
+        <button id="export-frames-gif-button" onclick="exportFramesAsGif()">Export as GIF</button>
       </div>
     </div>
   </div>

@@ -4,7 +4,7 @@ window.onload = function() {
 
   loadCanvas();
   initializeFrames();
-  loadJSZip();
+  loadExportTools();
 }
 
 let canvas, alphaCanvas, animCanvas;
@@ -25,7 +25,7 @@ let animationTimer;
 let animationDelay = 100;
 let currentAnimationFrame = 0;
 
-let zip;
+let zip, encoder;
 
 function loadCanvas() {
   canvas = document.getElementById('main-board');
@@ -36,6 +36,7 @@ function loadCanvas() {
   ctx.lineWidth = 5;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
+  ctx.fillStyle = "#FFF";
 
   ctxAlpha = alphaCanvas.getContext('2d');
   ctxAlpha.globalAlpha = 0.1;
@@ -194,7 +195,7 @@ function drawAlpha() {
 }
 
 function clearBoard(shouldSaveFlag) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   if (shouldSaveFlag) {
     tempStack = [];
@@ -357,12 +358,12 @@ function setButtonsDisabled(status) {
 }
 
 // EXPORT
-function loadJSZip() {
+function loadExportTools() {
   zip = new JSZip();
+  encoder = new GIFEncoder();
 }
 
-function exportFrames() {
-  console.log("EXPORT");
+function exportFramesAsPng() {
   for (let i = 0; i < frames.length; i++) {
     let fileName = "frame_" + i + ".png";
     zip.file(fileName, frames[i].src.substr(frames[i].src.indexOf(',')+1), {base64: true});
@@ -370,6 +371,21 @@ function exportFrames() {
   zip.generateAsync({type:"base64"}).then(function (base64) {
     window.location = "data:application/zip;base64," + base64;
   });
+}
+
+function exportFramesAsGif() {
+  encoder.setRepeat(0);
+  encoder.setDelay(animationDelay);
+  let gifFilename = "download.gif";
+
+  encoder.start();
+  for (let i = 0; i < frames.length; i++) {
+    ctx.drawImage(frames[i], 0, 0);
+    encoder.addFrame(ctx);
+  }
+  selectFrameFromElement(currentFrame);
+  encoder.finish();
+  encoder.download(gifFilename);
 }
 
 // DEBUGGING
