@@ -11,7 +11,7 @@
 
 <body>
   <div class="container">
-    <p>Flipbooker</p>
+    <h1>Flipbooker</h1>
 
     <div class="canvas-container">
       <canvas id="main-board" width="600" height="600"></canvas>
@@ -19,13 +19,19 @@
       <canvas id="anim-board" width="600" height="600"></canvas>
     </div>
 
-    <button id="clear-board-button" onclick="clearBoard(true)">Clear</button>
-    <button id="undo-draw-button" onclick="undo()">Undo</button>
-    <button id="redo-draw-button" onclick="redo()">Redo</button>
-    <button id="add-frame-button" onclick="addFrame('', false)">Add Frame</button>
-    <button id="delete-frame-button" onclick="deleteFrame()">Delete Frame</button>
-    <button id="clone-frame-button" onclick="cloneFrame()">Clone Frame</button>
-    <button onclick="handleAnimation(this)">Play</button>
+    <div class="button-container">
+      <div class="button-container-row">
+        <button id="clear-board-button" onclick="clearBoard(true)">Clear</button>
+        <button id="undo-draw-button" onclick="undo()">Undo</button>
+        <button id="redo-draw-button" onclick="redo()">Redo</button>
+      </div>
+      <div class="button-container-row">
+        <button id="add-frame-button" onclick="addFrame('', false)">Add Frame</button>
+        <button id="delete-frame-button" onclick="deleteFrame()">Delete Frame</button>
+        <button id="clone-frame-button" onclick="cloneFrame()">Clone Frame</button>
+        <button onclick="handleAnimation(this)">Play</button>
+      </div>
+    </div>
 
     <div class="scroll">
       <div id="frames"></div>

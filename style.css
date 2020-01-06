@@ -1,5 +1,53 @@
+@import url('https://fonts.googleapis.com/css?family=Black+Ops+One&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap');
+
+* {
+  font-family: "Nunito Sans";
+}
+
 html, body {
+  margin: 0px;
   height: 100%;
+}
+
+body {
+  background: #EEE;
+}
+
+h1 {
+  margin: 10px 0px;
+
+  font-family: "Black Ops One";
+  font-size: 54px;
+
+  color: #555;
+}
+
+button {
+  border: none;
+  border-radius: 4px;
+  padding: 15px 32px;
+  margin: 5px;
+
+  min-width: 100px;
+
+  background: #AAA;
+  color: #FFF;
+  font-size: 16px;
+  text-align: center;
+  text-decoration: none;
+
+  cursor: pointer;
+  outline: none;
+  transition: all 0.05s ease-out;
+}
+
+button:hover {
+  background: #999;
+}
+
+button:active {
+  background: #AAA;
 }
 
 canvas {
@@ -25,9 +73,25 @@ canvas {
   border: 1px solid #000;
 }
 
+.button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  margin: 10px 0px;
+  width: 600px;
+}
+
+.button-container-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 .scroll {
   border: 1px solid #000;
-  margin: 10px 0px;
 
   width: 600px;
   overflow-x: scroll;
@@ -35,6 +99,7 @@ canvas {
 
 #main-board {
   z-index: 0;
+  background: #FFF;
 }
 
 #alpha-board {
@@ -63,6 +128,8 @@ canvas {
 
   border: 1px solid #000;
   margin: 0px 5px;
+
+  background: #FFF;
 }
 
 #frames .current-frame {
