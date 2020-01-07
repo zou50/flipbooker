@@ -163,21 +163,20 @@ function redraw() {
         ctx.beginPath();
         ctx.moveTo(pt.x, pt.y);
         ctx.lineTo(pt.x, pt.y);
+        ctx.stroke();
       }
       if (pt.mode == "draw") {
         ctx.lineTo(pt.x, pt.y);
-      }
-      if (pt.mode == "end" || j == innerStack.length - 1) {
-        ctx.lineTo(pt.x, pt.y);
         ctx.stroke();
+      }
+      if (pt.mode == "end") {
+        ctx.lineTo(pt.x, pt.y);
       }
       if (pt.mode == "clear") {
         clearBoard(false);
         didClear = true;
       }
     }
-    if (!didClear)
-      ctx.stroke();
   }
   saveFrame();
 }
