@@ -23,6 +23,15 @@
   <div class="container">
     <h1>Flipbooker</h1>
 
+    <div class="color-container">
+      <button onclick="selectColor(this)" color="#000000" class="color-button current-color" id="start-color"></button>
+      <button onclick="selectColor(this)" color="#FFFFFF" class="color-button"></button>
+      <button onclick="selectColor(this)" color="#FF0000" class="color-button"></button>
+      <button onclick="selectColor(this)" color="#00FF00" class="color-button"></button>
+      <button onclick="selectColor(this)" color="#0000FF" class="color-button"></button>
+      <button onclick="selectColor(this)" color="#FFFF00" class="color-button"></button>
+    </div>
+
     <div class="canvas-container">
       <canvas id="main-board" width="512" height="512"></canvas>
       <canvas id="alpha-board" width="512" height="512"></canvas>

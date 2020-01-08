@@ -15,7 +15,7 @@ body {
 }
 
 h1 {
-  margin: 10px 0px;
+  margin: 0px;
 
   font-family: "Black Ops One";
   font-size: 54px;
@@ -68,6 +68,29 @@ canvas {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.color-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  margin: 16px 0px;
+}
+
+.color-button {
+  box-sizing: border-box;
+  border-radius: 0px;
+  margin: 0px;
+
+  padding: 30px;
+  width: 0px;
+  min-width: 0px;
+}
+
+.current-color {
+  transform: scale(1.2);
 }
 
 .canvas-container {

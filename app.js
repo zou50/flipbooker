@@ -3,12 +3,16 @@ window.onload = function() {
   console.log("Flipbooker");
 
   loadCanvas();
+  loadColorButtons();
   initializeFrames();
   loadExportTools();
 }
 
 let canvas, alphaCanvas, animCanvas;
 let ctx, ctxAlpha, ctxAnim;
+let currentColor = "#000000";
+let currentColorElement;
+let currentSize = 5;
 
 let isDrawing = false;
 let lastX = 0, lastY = 0;
@@ -31,15 +35,17 @@ function loadCanvas() {
   canvas = document.getElementById('main-board');
   alphaCanvas = document.getElementById('alpha-board');
   animCanvas = document.getElementById('anim-board');
+  currentColorElement = document.getElementById("start-color");
 
   ctx = canvas.getContext('2d');
-  ctx.lineWidth = 5;
+  ctx.strokeStyle = currentColor;
+  ctx.fillStyle = "#FFFFFF";
+  ctx.lineWidth = currentSize;
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
-  ctx.fillStyle = "#FFF";
 
   ctxAlpha = alphaCanvas.getContext('2d');
-  ctxAlpha.globalAlpha = 0.1;
+  ctxAlpha.globalAlpha = 0.2;
 
   ctxAnim = animCanvas.getContext('2d');
 
@@ -49,6 +55,13 @@ function loadCanvas() {
   canvas.addEventListener('mousemove', onMouseMove);
   canvas.addEventListener('mousedown', onMouseDown);
   canvas.addEventListener('mouseup', onMouseUp);
+}
+
+function loadColorButtons() {
+  let colorButtons = document.getElementsByClassName("color-button");
+  for (let i = 0; i < colorButtons.length; i++) {
+    colorButtons[i].style.backgroundColor = colorButtons[i].getAttribute("color");
+  }
 }
 
 function onMouseEnter() {
@@ -89,6 +102,7 @@ function draw(e) {
   tempStack.push({
     x: mx,
     y: my,
+    color: ctx.strokeStyle,
     mode: "draw",
   });
 }
@@ -106,6 +120,7 @@ function drawDown(e) {
   tempStack.push({
     x: mx,
     y: my,
+    color: ctx.strokeStyle,
     mode: "begin",
   });
 
@@ -121,13 +136,14 @@ function drawUp(e) {
   tempStack.push({
     x: mx,
     y: my,
+    color: ctx.strokeStyle,
     mode: "end",
   });
   undoStack.push(tempStack);
   redoStack = [];
 
   isDrawing = false;
-  redraw();
+  saveFrame();
 }
 
 function undo() {
@@ -161,6 +177,7 @@ function redraw() {
 
       if (pt.mode == "begin") {
         ctx.beginPath();
+        ctx.strokeStyle = pt.color;
         ctx.moveTo(pt.x, pt.y);
         ctx.lineTo(pt.x, pt.y);
         ctx.stroke();
@@ -178,6 +195,7 @@ function redraw() {
       }
     }
   }
+  ctx.strokeStyle = currentColor;
   saveFrame();
 }
 
@@ -213,6 +231,14 @@ function clearAlphaBoard() {
 
 function clearAnimBoard() {
   ctxAnim.clearRect(0, 0, animCanvas.width, animCanvas.height);
+}
+
+function selectColor(e) {
+  currentColorElement.classList.remove("current-color");
+  e.classList.add("current-color");
+  currentColorElement = e;
+  currentColor = e.getAttribute('color');
+  ctx.strokeStyle = currentColor;
 }
 
 // FRAMES
