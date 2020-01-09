@@ -48,6 +48,8 @@ function loadCanvas() {
   ctxAlpha.globalAlpha = 0.2;
 
   ctxAnim = animCanvas.getContext('2d');
+  ctxAnim.strokeStyle = currentColor;
+  ctxAnim.fillStyle = currentColor;
 
   // Add event listeners
   canvas.addEventListener('mouseenter', onMouseEnter);
@@ -73,16 +75,21 @@ function onMouseOut() {
 }
 
 function onMouseMove(e) {
+  drawPointer(e);
   draw(e);
 }
 
 function onMouseDown(e) {
   console.log("mouse down");
+  if (isAnimationPlaying)
+    return;
   drawDown(e);
 }
 
 function onMouseUp(e) {
   console.log("mouse up");
+  if (isAnimationPlaying)
+    return;
   drawUp(e);
 }
 
@@ -144,6 +151,19 @@ function drawUp(e) {
 
   isDrawing = false;
   saveFrame();
+}
+
+function drawPointer(e) {
+  if (isAnimationPlaying)
+    return;
+
+  let mx = e.offsetX;
+  let my = e.offsetY;
+
+  clearAnimBoard();
+  ctxAnim.beginPath();
+  ctxAnim.ellipse(mx, my, currentSize * 0.5, currentSize * 0.5, 0, 0, Math.PI * 2);
+  ctxAnim.fill();
 }
 
 function undo() {
@@ -239,6 +259,8 @@ function selectColor(e) {
   currentColorElement = e;
   currentColor = e.getAttribute('color');
   ctx.strokeStyle = currentColor;
+  ctxAnim.strokeStyle = currentColor;
+  ctxAnim.fillStyle = currentColor;
 }
 
 // FRAMES

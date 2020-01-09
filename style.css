@@ -61,6 +61,8 @@ canvas {
   left: 0;
   right: 0;
   box-sizing: border-box;
+
+  cursor: none;
 }
 
 .container {
