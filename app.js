@@ -4,6 +4,7 @@ window.onload = function() {
 
   loadCanvas();
   loadColorButtons();
+  loadSizeSlider();
   initializeFrames();
   loadExportTools();
 }
@@ -66,6 +67,14 @@ function loadColorButtons() {
   }
 }
 
+function loadSizeSlider() {
+  let sizeSlider = document.getElementById('size-slider');
+  sizeSlider.oninput = function() {
+    currentSize = this.value;
+    ctx.lineWidth = currentSize;
+  }
+}
+
 function onMouseEnter() {
   console.log("mouse enter");
 }
@@ -110,6 +119,7 @@ function draw(e) {
     x: mx,
     y: my,
     color: ctx.strokeStyle,
+    size: ctx.lineWidth,
     mode: "draw",
   });
 }
@@ -128,6 +138,7 @@ function drawDown(e) {
     x: mx,
     y: my,
     color: ctx.strokeStyle,
+    size: ctx.lineWidth,
     mode: "begin",
   });
 
@@ -144,6 +155,7 @@ function drawUp(e) {
     x: mx,
     y: my,
     color: ctx.strokeStyle,
+    size: ctx.lineWidth,
     mode: "end",
   });
   undoStack.push(tempStack);
@@ -198,6 +210,7 @@ function redraw() {
       if (pt.mode == "begin") {
         ctx.beginPath();
         ctx.strokeStyle = pt.color;
+        ctx.lineWidth = pt.size;
         ctx.moveTo(pt.x, pt.y);
         ctx.lineTo(pt.x, pt.y);
         ctx.stroke();
@@ -216,6 +229,7 @@ function redraw() {
     }
   }
   ctx.strokeStyle = currentColor;
+  ctx.lineWidth = currentSize;
   saveFrame();
 }
 
